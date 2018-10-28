@@ -275,6 +275,7 @@
   .dater_cards > div {
     min-width: 333px;
     margin-bottom: 1em;
+    border-radius: 0 1em;
     padding: 1em;
     background-color: rgba(254, 186, 239, 0.5);
     display: flex;
