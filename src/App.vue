@@ -24,8 +24,8 @@
           <!--  -->
           <!--  -->
 
-          <div style="margin-top: 0; border-right: 2px solid #fff; display: flex;">
-            <div style="padding-top: 1em; flex-basis: 50%;">
+          <div style="margin-top: 0; display: flex;">
+            <div style="border-right: 2px solid #fff; padding-top: 1em; flex-basis: 50%;">
               <p style="text-align: center;"><b>Matches</b> ({{ dater.emailCurrentMatches.length }})</p>
               <ul style="margin: 0; padding: 0.5em 1em 0.5em 1em">
                 <li v-if="dater.emailCurrentMatches"
