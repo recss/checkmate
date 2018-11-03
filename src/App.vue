@@ -7,15 +7,9 @@
       </div>
 
       <!--  -->
+      
       <div class="dater_cards">
-        <!-- <div>aaa</div>
-        <div>aaa</div>
-        <div>aaa</div> -->
-
-        <!-- <div>aaa</div>
-        <div>aaa</div>
-        <div>aaa</div> -->
-
+        <!--  -->
         <div v-for="dater in participants" :key="dater.email">
           <h2>
             {{ dater.name }}
@@ -27,63 +21,68 @@
           </p>
           <p v-if="dater.comments">{{ dater.comments }}</p>
 
-          <p style="margin-top: 1em; text-align: center;"><b>Matches</b> ({{ dater.emailCurrentMatches.length }})</p>
-            <ul
-              v-if="dater.emailCurrentMatches"
-              v-for="matches in dater.emailCurrentMatches"
-              :key="matches.index"
-              style="margin: 0;"
-            >
-              <li>{{ matches }}</li>
-              <!-- <li v-on:change="m_emailToName(matches)">{{ matches }}</li> -->
-            </ul>
-            <ul v-if="!dater.emailCurrentMatches.length" style="margin: 0;">
-              <li>No matches this time.</li>
-            </ul>
-        </div>
-
-        <!-- <div>aaa</div>
-        <div>aaa</div>
-        <div>aaa</div> -->
-
-        <!-- <div>aaa</div>
-        <div>aaa</div>
-        <div>aaa</div> -->
-      </div>
-
-      <!-- <ul v-for="dater in participants" :key="dater.email">
-        <li><b>{{ dater.name }}</b> ({{ dater.email }})</li>
-        <ul>
-          <li>Information</li>
-          <ul>
-            <li>{{ dater.sex }} ({{ dater.pronouns | f_underscoreSlash }})</li>
-            <li>{{ dater.orientation | f_reorient }}</li>
-            <li v-if="dater.comments">{{ dater.comments }}</li>
-          </ul>
-
-          <li>Friends</li>
-          <ul v-for="friend in dater.emailFriends" :key="friend.index">
-            <li>{{ friend }}</li>
-          </ul>
-
-          <li>Encounters</li>
-          <ul v-for="encountered in dater.emailEncounters" :key="encountered.index">
-            <li>{{ encountered }}</li>
-          </ul>
-
-          <li>Matches ({{ dater.emailCurrentMatches.length }})</li>
+          <!-- <p style="margin-top: 1em; text-align: center;"><b>Matches</b> ({{ dater.emailCurrentMatches.length }})</p>
           <ul
             v-if="dater.emailCurrentMatches"
             v-for="matches in dater.emailCurrentMatches"
             :key="matches.index"
+            style="margin: 0;"
           >
             <li>{{ matches }}</li>
           </ul>
-          <ul v-if="!dater.emailCurrentMatches.length">
+          <ul v-if="!dater.emailCurrentMatches.length" style="margin: 0;">
             <li>No matches this time.</li>
+          </ul> -->
+
+          <!--  -->
+          <!--  -->
+
+          <div style="margin-top: 1em; display: flex;">
+            <div style="flex-basis: 50%;">
+              <p style="text-align: center;"><b>Matches</b> ({{ dater.emailCurrentMatches.length }})</p>
+              <ul style="margin: 0; border-right: 2px solid #fff; padding: 0.5em 1em 0.5em 1em">
+                <li v-if="dater.emailCurrentMatches"
+                  v-for="matches in dater.emailCurrentMatches"
+                  :key="matches.index"
+                >
+                  {{ matches }}</li>
+              </ul>
+              <ul v-if="!dater.emailCurrentMatches.length" style="margin: 0;">
+                <li>No matches this time.</li>
+              </ul>
+            </div>
+
+            <div style="flex-basis: 50%;">
+              <p style="text-align: center;"><b>Invalid Matches</b> ({{ dater.emailInvalidMatches.length }})</p>
+              <ul style="margin: 0; padding: 0.5em 0;">
+                <li v-if="dater.emailInvalidMatches"
+                  v-for="matches in dater.emailInvalidMatches"
+                  :key="matches.index"
+                  style="margin-left: 2em;"
+                >
+                  {{ matches }}</li>
+              </ul>
+              <ul v-if="!dater.emailInvalidMatches.length" style="margin: 0;">
+                <li>Not applicable.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- <p style="margin-top: 1em; text-align: center;"><b>Matches</b> ({{ dater.emailCurrentMatches.length }})</p>
+          <ul
+            v-if="dater.emailCurrentMatches"
+            v-for="matches in dater.emailCurrentMatches"
+            :key="matches.index"
+            style="margin: 0;"
+          >
+            <li>{{ matches }}</li>
           </ul>
-        </ul>
-      </ul> -->
+          <ul v-if="!dater.emailCurrentMatches.length" style="margin: 0;">
+            <li>No matches this time.</li>
+          </ul> -->
+        </div>
+        <!--  -->
+      </div>
     </main>
   </div>
 </template>
@@ -128,6 +127,7 @@
               // console.log(_dater);
 
               _dater.emailCurrentMatches = [];
+              _dater.emailInvalidMatches = [];
 
               return data.participants.filter(function(_partner) {
                 // if not (yourself, friend, or encountered) and (sex and orientation) align, then connect
@@ -135,40 +135,68 @@
                 // sex: female, male, nonbinary?
                 // orientation: same, different, all?
 
-                if(!_dater.email.includes(_partner.email) &&
-                  !_dater.emailFriends.includes(_partner.email) &&
-                  !_partner.emailFriends.includes(_dater.email) &&
-                  !_dater.emailEncounters.includes(_partner.email))
-                {
-                  switch(_dater.orientation.toLowerCase())
-                  {
-                    case 'same':
-                      if((_partner.orientation.toLowerCase() == 'same' && _partner.sex == _dater.sex) ||
-                        (_partner.orientation.toLowerCase() == 'all' && _partner.sex == _dater.sex))
-                      {
-                        return _dater.emailCurrentMatches.push(_partner.email);
-                      }
-                      break;
-                    
-                    case 'different':
-                      if((_partner.orientation.toLowerCase() == 'different' && _partner.sex !== _dater.sex) ||
-                        (_partner.orientation.toLowerCase() == 'all' && _partner.sex !== _dater.sex))
-                      {
-                        return _dater.emailCurrentMatches.push(_partner.email);
-                      }
-                      break;
-                    
-                    case 'all':
-                      if((_partner.orientation.toLowerCase() == 'all') ||
-                        (_partner.orientation.toLowerCase() == 'same' && _partner.sex == _dater.sex) ||
-                        (_partner.orientation.toLowerCase() == 'different' && _partner.sex !== _dater.sex))
-                      {
-                        return _dater.emailCurrentMatches.push(_partner.email);
-                      }
-                  }
-                  // end of switch statement
-                }
-                // end of if statement
+				switch(_dater.orientation.toLowerCase())
+				{
+				case 'same':
+					if((_partner.orientation.toLowerCase() == 'same' && _partner.sex == _dater.sex) ||
+					(_partner.orientation.toLowerCase() == 'all' && _partner.sex == _dater.sex))
+					{
+						if(!_dater.email.includes(_partner.email) &&
+							!_dater.emailFriends.includes(_partner.email) &&
+							!_partner.emailFriends.includes(_dater.email) &&
+							!_dater.emailEncounters.includes(_partner.email) &&
+							!_partner.emailEncounters.includes(_dater.email))
+						{
+							return _dater.emailCurrentMatches.push(_partner.email);
+						}
+						else if(!_dater.email.includes(_partner.email))
+						{
+							return _dater.emailInvalidMatches.push(_partner.email);
+						}
+					}
+
+					break;
+				
+				case 'different':
+					if((_partner.orientation.toLowerCase() == 'different' && _partner.sex !== _dater.sex) ||
+						(_partner.orientation.toLowerCase() == 'all' && _partner.sex !== _dater.sex))
+					{
+						if(!_dater.email.includes(_partner.email) &&
+							!_dater.emailFriends.includes(_partner.email) &&
+							!_partner.emailFriends.includes(_dater.email) &&
+							!_dater.emailEncounters.includes(_partner.email) &&
+							!_partner.emailEncounters.includes(_dater.email))
+						{
+							return _dater.emailCurrentMatches.push(_partner.email);
+						}
+						else if(!_dater.email.includes(_partner.email))
+						{
+							return _dater.emailInvalidMatches.push(_partner.email);
+						}
+					}
+
+					break;
+				
+				case 'all':
+					if((_partner.orientation.toLowerCase() == 'all') ||
+					(_partner.orientation.toLowerCase() == 'same' && _partner.sex == _dater.sex) ||
+					(_partner.orientation.toLowerCase() == 'different' && _partner.sex !== _dater.sex))
+					{
+						if(!_dater.email.includes(_partner.email) &&
+							!_dater.emailFriends.includes(_partner.email) &&
+							!_partner.emailFriends.includes(_dater.email) &&
+							!_dater.emailEncounters.includes(_partner.email) &&
+							!_partner.emailEncounters.includes(_dater.email))
+						{
+							return _dater.emailCurrentMatches.push(_partner.email);
+						}
+						else if(!_dater.email.includes(_partner.email))
+						{
+							return _dater.emailInvalidMatches.push(_partner.email);
+						}
+					}
+				}
+				// end of switch statement
               });
             });
           }
@@ -273,7 +301,7 @@
       align-items: stretch;
   }
   .dater_cards > div {
-    min-width: 333px;
+    /* min-width: 333px; */
     margin-bottom: 1em;
     border-radius: 0 1em;
     padding: 1em;
