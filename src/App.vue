@@ -21,26 +21,13 @@
           </p>
           <p v-if="dater.comments">{{ dater.comments }}</p>
 
-          <!-- <p style="margin-top: 1em; text-align: center;"><b>Matches</b> ({{ dater.emailCurrentMatches.length }})</p>
-          <ul
-            v-if="dater.emailCurrentMatches"
-            v-for="matches in dater.emailCurrentMatches"
-            :key="matches.index"
-            style="margin: 0;"
-          >
-            <li>{{ matches }}</li>
-          </ul>
-          <ul v-if="!dater.emailCurrentMatches.length" style="margin: 0;">
-            <li>No matches this time.</li>
-          </ul> -->
-
           <!--  -->
           <!--  -->
 
-          <div style="margin-top: 1em; display: flex;">
-            <div style="flex-basis: 50%;">
+          <div style="margin-top: 0; border-right: 2px solid #fff; display: flex;">
+            <div style="padding-top: 1em; flex-basis: 50%;">
               <p style="text-align: center;"><b>Matches</b> ({{ dater.emailCurrentMatches.length }})</p>
-              <ul style="margin: 0; border-right: 2px solid #fff; padding: 0.5em 1em 0.5em 1em">
+              <ul style="margin: 0; padding: 0.5em 1em 0.5em 1em">
                 <li v-if="dater.emailCurrentMatches"
                   v-for="matches in dater.emailCurrentMatches"
                   :key="matches.index"
@@ -52,7 +39,7 @@
               </ul>
             </div>
 
-            <div style="flex-basis: 50%;">
+            <div style="padding-top: 1em; flex-basis: 50%;">
               <p style="text-align: center;"><b>Invalid Matches</b> ({{ dater.emailInvalidMatches.length }})</p>
               <ul style="margin: 0; padding: 0.5em 0;">
                 <li v-if="dater.emailInvalidMatches"
@@ -67,19 +54,7 @@
               </ul>
             </div>
           </div>
-
-          <!-- <p style="margin-top: 1em; text-align: center;"><b>Matches</b> ({{ dater.emailCurrentMatches.length }})</p>
-          <ul
-            v-if="dater.emailCurrentMatches"
-            v-for="matches in dater.emailCurrentMatches"
-            :key="matches.index"
-            style="margin: 0;"
-          >
-            <li>{{ matches }}</li>
-          </ul>
-          <ul v-if="!dater.emailCurrentMatches.length" style="margin: 0;">
-            <li>No matches this time.</li>
-          </ul> -->
+          <!--  -->
         </div>
         <!--  -->
       </div>
