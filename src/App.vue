@@ -1,15 +1,59 @@
 <template>
   <div id="app">
     <main>
+
       <div class="underlinedHeader">
-        <h1>Checkmate Speed Dating</h1>
+        <h1>Checkmate <!-- Speed Dating --></h1>
         <hr>
       </div>
 
       <!--  -->
+
+      <section style="display: flex;">
+        <div style="flex-basis: calc(100%/3);">
+          <p>Female</p>
+          <ul>
+            <li v-for="dater in participantsABC_Female" style="margin-bottom: 1em;"><b>{{ dater.name }}</b> <small>({{ dater.emailCurrentMatches.length }} matches)</small>
+              <ul>
+                <li v-for="d in dater.emailCurrentMatches">{{d.name}}, <small>{{d.sex}}</small></li>
+              </ul>
+            </li>
+            <!--  -->
+
+            <li v-if="!participantsABC_Female.length">No participants available.</li>
+          </ul>
+        </div>
+
+        <div style="flex-basis: calc(100%/3);">
+          <p>Male</p>
+          <ul>
+            <li v-for="dater in participantsABC_Male" style="margin-bottom: 1em;"><b>{{ dater.name }}</b> <small>({{ dater.emailCurrentMatches.length }} matches)</small>
+              <ul>
+                <li v-for="d in dater.emailCurrentMatches">{{d.name}}, <small>{{d.sex}}</small></li>
+              </ul>
+            </li>
+            <!--  -->
+
+            <li v-if="!participantsABC_Male.length">No participants available.</li>
+          </ul>
+        </div>
+
+        <div style="flex-basis: calc(100%/3);">
+          <p>Non-Binary</p>
+          <ul>
+            <li v-for="dater in participantsABC_NonBinary" style="margin-bottom: 1em;"><b>{{ dater.name }}</b> <small>({{ dater.emailCurrentMatches.length }} matches)</small>
+              <ul>
+                <li v-for="d in dater.emailCurrentMatches">{{d.name}}, <small>{{d.sex}}</small></li>
+              </ul>
+            </li>
+            <!--  -->
+
+            <li v-if="!participantsABC_NonBinary.length">No participants available.</li>
+          </ul>
+        </div>
+      </section>
       
-      <div class="dater_cards">
-        <!--  -->
+      <!-- <div class="dater_cards">
         <div v-for="dater in participants" :key="dater.email">
           <h2>
             {{ dater.name }}
@@ -21,8 +65,6 @@
           </p>
           <p v-if="dater.comments">{{ dater.comments }}</p>
 
-          <!--  -->
-          <!--  -->
 
           <div style="margin-top: 0; display: flex;">
             <div style="border-right: 2px solid #fff; padding-top: 1em; flex-basis: 50%;">
@@ -54,10 +96,9 @@
               </ul>
             </div>
           </div>
-          <!--  -->
         </div>
-        <!--  -->
-      </div>
+      </div> -->
+
     </main>
   </div>
 </template>
@@ -87,7 +128,13 @@
     name: 'app',
     data: () => ({
       participants: [],
-      queryResult: []
+      participantsABC_Current: [],
+      participantsABC_Female: [],
+      participantsABC_Male: [],
+      participantsABC_NonBinary: [],
+      queryResult: [],
+      currentEvent: 'November_2018'
+      // currentEvent: 'December_2018'
     }),
     apollo: {
       $loadingKey: 'loading',
@@ -95,93 +142,153 @@
         query: participants,
         result({data, loading, networkStatus}) {
           if(!loading) {
-            console.log(data.participants);
-            this.queryResult = data.participants;
+            const vm  = this;
+            
+            const participantsABC = vm.m_arrayAlphabetized(data.participants, 'name');
 
-            data.participants.forEach(function(_dater) {
-              // console.log(_dater);
+            vm.participantsABC_Current = participantsABC.filter(function(_dater) {
+              if(_dater.attendance.includes(vm.currentEvent)) {
+                return _dater;
+              }
+            });
+
+            // console.log('vm.participantsABC_Current:', vm.participantsABC_Current);
+
+            vm.participantsABC_Current.forEach(function(_dater) {
 
               _dater.emailCurrentMatches = [];
               _dater.emailInvalidMatches = [];
 
-              return data.participants.filter(function(_partner) {
-                // if not (yourself, friend, or encountered) and (sex and orientation) align, then connect
+              vm.participantsABC_Current.filter(function(_partner) {
+                // --------------------------------------------------------
 
-                // sex: female, male, nonbinary?
-                // orientation: same, different, all?
+                  switch(_dater.orientation.toLowerCase())
+                  {
+                    // -----------------------------------
 
-				switch(_dater.orientation.toLowerCase())
-				{
-				case 'same':
-					if((_partner.orientation.toLowerCase() == 'same' && _partner.sex == _dater.sex) ||
-					(_partner.orientation.toLowerCase() == 'all' && _partner.sex == _dater.sex))
-					{
-						if(!_dater.email.includes(_partner.email) &&
-							!_dater.emailFriends.includes(_partner.email) &&
-							!_partner.emailFriends.includes(_dater.email) &&
-							!_dater.emailEncounters.includes(_partner.email) &&
-							!_partner.emailEncounters.includes(_dater.email))
-						{
-							return _dater.emailCurrentMatches.push(_partner.email);
-						}
-						else if(!_dater.email.includes(_partner.email))
-						{
-							return _dater.emailInvalidMatches.push(_partner.email);
-						}
-					}
+                    case 'same':
+                      if((_partner.orientation.toLowerCase() == 'same' && _partner.sex == _dater.sex) ||
+                      (_partner.orientation.toLowerCase() == 'all' && _partner.sex == _dater.sex))
+                      {
+                        if(!_dater.email.includes(_partner.email) &&
+                          !_dater.emailFriends.includes(_partner.email) &&
+                          !_partner.emailFriends.includes(_dater.email) &&
+                          !_dater.emailEncounters.includes(_partner.email) &&
+                          !_partner.emailEncounters.includes(_dater.email))
+                        {
+                          return _dater.emailCurrentMatches.push(_partner);
+                        }
+                        else if(!_dater.email.includes(_partner.email))
+                        {
+                          return _dater.emailInvalidMatches.push(_partner);
+                        }
+                      }
 
-					break;
-				
-				case 'different':
-					if((_partner.orientation.toLowerCase() == 'different' && _partner.sex !== _dater.sex) ||
-						(_partner.orientation.toLowerCase() == 'all' && _partner.sex !== _dater.sex))
-					{
-						if(!_dater.email.includes(_partner.email) &&
-							!_dater.emailFriends.includes(_partner.email) &&
-							!_partner.emailFriends.includes(_dater.email) &&
-							!_dater.emailEncounters.includes(_partner.email) &&
-							!_partner.emailEncounters.includes(_dater.email))
-						{
-							return _dater.emailCurrentMatches.push(_partner.email);
-						}
-						else if(!_dater.email.includes(_partner.email))
-						{
-							return _dater.emailInvalidMatches.push(_partner.email);
-						}
-					}
+                      break;
+                    
+                    case 'different':
+                      if((_partner.orientation.toLowerCase() == 'different' && _partner.sex !== _dater.sex) ||
+                        (_partner.orientation.toLowerCase() == 'all' && _partner.sex !== _dater.sex))
+                      {
+                        if(!_dater.email.includes(_partner.email) &&
+                          !_dater.emailFriends.includes(_partner.email) &&
+                          !_partner.emailFriends.includes(_dater.email) &&
+                          !_dater.emailEncounters.includes(_partner.email) &&
+                          !_partner.emailEncounters.includes(_dater.email))
+                        {
+                          return _dater.emailCurrentMatches.push(_partner);
+                        }
+                        else if(!_dater.email.includes(_partner.email))
+                        {
+                          return _dater.emailInvalidMatches.push(_partner);
+                        }
+                      }
 
-					break;
-				
-				case 'all':
-					if((_partner.orientation.toLowerCase() == 'all') ||
-					(_partner.orientation.toLowerCase() == 'same' && _partner.sex == _dater.sex) ||
-					(_partner.orientation.toLowerCase() == 'different' && _partner.sex !== _dater.sex))
-					{
-						if(!_dater.email.includes(_partner.email) &&
-							!_dater.emailFriends.includes(_partner.email) &&
-							!_partner.emailFriends.includes(_dater.email) &&
-							!_dater.emailEncounters.includes(_partner.email) &&
-							!_partner.emailEncounters.includes(_dater.email))
-						{
-							return _dater.emailCurrentMatches.push(_partner.email);
-						}
-						else if(!_dater.email.includes(_partner.email))
-						{
-							return _dater.emailInvalidMatches.push(_partner.email);
-						}
-					}
-				}
-				// end of switch statement
+                      break;
+                    
+                    case 'all':
+                      if((_partner.orientation.toLowerCase() == 'all') ||
+                      (_partner.orientation.toLowerCase() == 'same' && _partner.sex == _dater.sex) ||
+                      (_partner.orientation.toLowerCase() == 'different' && _partner.sex !== _dater.sex))
+                      {
+                        if(!_dater.email.includes(_partner.email) &&
+                          !_dater.emailFriends.includes(_partner.email) &&
+                          !_partner.emailFriends.includes(_dater.email) &&
+                          !_dater.emailEncounters.includes(_partner.email) &&
+                          !_partner.emailEncounters.includes(_dater.email))
+                        {
+                          return _dater.emailCurrentMatches.push(_partner);
+                        }
+                        else if(!_dater.email.includes(_partner.email))
+                        {
+                          return _dater.emailInvalidMatches.push(_partner);
+                        }
+                      }
+
+                    // -----------------------------------
+                  }
+
+                // --------------------------------------------------------
               });
             });
-          }
-        }
-      }
+
+            vm.participantsABC_Female = vm.participantsABC_Current.filter(function(_dater) {
+              if(_dater.sex == 'Female') {
+                return vm.m_participantSexMatches(_dater);
+              }
+            });
+
+            vm.participantsABC_Male = vm.participantsABC_Current.filter(function(_dater) {
+              if(_dater.sex == 'Male') {
+                return vm.m_participantSexMatches(_dater);
+              }
+            });
+
+            vm.participantsABC_NonBinary = vm.participantsABC_Current.filter(function(_dater) {
+              if(_dater.sex == 'NonBinary') {
+                return vm.m_participantSexMatches(_dater);
+              }
+            });
+
+          } // if() {}
+        } // result() {}
+      } // participants: {}
     },
+    computed: {},
     methods: {
-      m_emailToName: function(value) {
-        console.log('just a minute too late', this.queryResult);
-        return value;
+      m_arrayAlphabetized: function(_data, _parameter) {
+        // console.log('_data', _data);
+        // console.log('_parameter', _parameter);
+
+        return _data.sort(function(a, b) {
+
+          // console.log('a:', a.name);
+          // console.log('a.' + _parameter + ':', a[_parameter]);
+          // console.log('b:', b);
+          // console.log('b.' + _parameter + ':', b[_parameter]);
+
+          const first = a[_parameter].toUpperCase();
+          const second = b[_parameter].toUpperCase();
+
+          if(first > second) {
+            return 1;
+          }
+
+          if(first < second) {
+            return -1;
+          }
+
+          return 0;
+        });
+      },
+      m_participantSexMatches: function(_data) {
+        // console.log(_data.name + ':');
+
+        _data.emailCurrentMatches.forEach(function(_match) {
+          // console.log(_match);
+        })
+
+        return _data;
       }
     },
     filters: {
