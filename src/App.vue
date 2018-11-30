@@ -14,7 +14,10 @@
         <div style="flex-basis: calc(100%/3);">
           <p>Female</p>
           <ul>
-            <li v-for="dater in participantsABC_Female" style="margin-bottom: 1em;"><b>{{ dater.name }}</b> <small>({{ dater.emailCurrentMatches.length }} matches)</small>
+            <li v-for="dater in participantsABC_Female" style="margin-bottom: 1em;">
+              <b>{{ dater.name }}</b>, <small>{{ dater.orientation | f_reorient }}</small>
+              <br><small style="position: relative; top: -0.5em;">({{ dater.emailCurrentMatches.length }} matches)</small>
+
               <ul>
                 <li v-for="d in dater.emailCurrentMatches">{{d.name}}, <small>{{d.sex}}</small></li>
                 <li v-for="d in dater.emailInvalidMatches" style=""><del>{{d.name}}, <small>{{d.sex}}</small></del></li>
@@ -29,10 +32,17 @@
         <div style="flex-basis: calc(100%/3);">
           <p>Male</p>
           <ul>
-            <li v-for="dater in participantsABC_Male" style="margin-bottom: 1em;"><b>{{ dater.name }}</b> <small>({{ dater.emailCurrentMatches.length }} matches)</small>
+            <li v-for="dater in participantsABC_Male" style="margin-bottom: 1em;">
+              <b>{{ dater.name }}</b>, <small>{{ dater.orientation | f_reorient }}</small>
+              <br><small style="position: relative; top: -0.5em;">({{ dater.emailCurrentMatches.length }} matches)</small>
+
               <ul>
-                <li v-for="d in dater.emailCurrentMatches">{{d.name}}, <small>{{d.sex}}</small></li>
-                <li v-for="d in dater.emailInvalidMatches" style=""><del>{{d.name}}, <small>{{d.sex}}</small></del></li>
+                <li v-for="d in dater.emailCurrentMatches">
+                  {{d.name}}, <small>{{d.sex}}</small>
+                </li>
+                <li v-for="d in dater.emailInvalidMatches">
+                  <del>{{d.name}}, <small>{{d.sex}}</small></del>
+                </li>
               </ul>
             </li>
             <!--  -->
@@ -44,7 +54,10 @@
         <div style="flex-basis: calc(100%/3);">
           <p>Non-Binary</p>
           <ul>
-            <li v-for="dater in participantsABC_NonBinary" style="margin-bottom: 1em;"><b>{{ dater.name }}</b> <small>({{ dater.emailCurrentMatches.length }} matches)</small>
+            <li v-for="dater in participantsABC_NonBinary" style="margin-bottom: 1em;">
+              <b>{{ dater.name }}</b>, <small>{{ dater.orientation | f_reorient }}</small>
+              <br><small style="position: relative; top: -0.5em;">({{ dater.emailCurrentMatches.length }} matches)</small>
+
               <ul>
                 <li v-for="d in dater.emailCurrentMatches">{{d.name}}, <small>{{d.sex}}</small></li>
                 <li v-for="d in dater.emailInvalidMatches" style=""><del>{{d.name}}, <small>{{d.sex}}</small></del></li>
@@ -137,7 +150,8 @@
       participantsABC_Male: [],
       participantsABC_NonBinary: [],
       queryResult: [],
-      currentEvent: 'December_2018'
+      // currentEvent: 'December_2018'
+      currentEvent: 'November_2018'
     }),
     apollo: {
       $loadingKey: 'loading',
