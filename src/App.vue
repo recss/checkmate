@@ -3,6 +3,7 @@
     <main>
 
       <div class="underlinedHeader">
+        <h3 style="margin-bottom: 0; padding-left: 0.25em; position: relative; top: 0.5em;">December</h3>
         <h1>Checkmate Speed Dating</h1>
         <hr>
       </div>
@@ -136,8 +137,7 @@
       participantsABC_Male: [],
       participantsABC_NonBinary: [],
       queryResult: [],
-      currentEvent: 'November_2018'
-      // currentEvent: 'December_2018'
+      currentEvent: 'December_2018'
     }),
     apollo: {
       $loadingKey: 'loading',
@@ -371,6 +371,7 @@
     width: max-content;
   }
   .underlinedHeader h1 {
+    margin-top: 0;
     padding: 0 0.15em;
   }
   .underlinedHeader hr {
