@@ -3,7 +3,7 @@
     <main>
 
       <div class="underlinedHeader">
-        <h1>Checkmate <!-- Speed Dating --></h1>
+        <h1>Checkmate Speed Dating</h1>
         <hr>
       </div>
 
