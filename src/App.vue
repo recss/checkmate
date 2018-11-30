@@ -16,6 +16,7 @@
             <li v-for="dater in participantsABC_Female" style="margin-bottom: 1em;"><b>{{ dater.name }}</b> <small>({{ dater.emailCurrentMatches.length }} matches)</small>
               <ul>
                 <li v-for="d in dater.emailCurrentMatches">{{d.name}}, <small>{{d.sex}}</small></li>
+                <li v-for="d in dater.emailInvalidMatches" style=""><del>{{d.name}}, <small>{{d.sex}}</small></del></li>
               </ul>
             </li>
             <!--  -->
@@ -30,6 +31,7 @@
             <li v-for="dater in participantsABC_Male" style="margin-bottom: 1em;"><b>{{ dater.name }}</b> <small>({{ dater.emailCurrentMatches.length }} matches)</small>
               <ul>
                 <li v-for="d in dater.emailCurrentMatches">{{d.name}}, <small>{{d.sex}}</small></li>
+                <li v-for="d in dater.emailInvalidMatches" style=""><del>{{d.name}}, <small>{{d.sex}}</small></del></li>
               </ul>
             </li>
             <!--  -->
@@ -44,6 +46,7 @@
             <li v-for="dater in participantsABC_NonBinary" style="margin-bottom: 1em;"><b>{{ dater.name }}</b> <small>({{ dater.emailCurrentMatches.length }} matches)</small>
               <ul>
                 <li v-for="d in dater.emailCurrentMatches">{{d.name}}, <small>{{d.sex}}</small></li>
+                <li v-for="d in dater.emailInvalidMatches" style=""><del>{{d.name}}, <small>{{d.sex}}</small></del></li>
               </ul>
             </li>
             <!--  -->
