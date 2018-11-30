@@ -150,8 +150,8 @@
       participantsABC_Male: [],
       participantsABC_NonBinary: [],
       queryResult: [],
-      // currentEvent: 'December_2018'
-      currentEvent: 'November_2018'
+      currentEvent: 'December_2018'
+      // currentEvent: 'November_2018'
     }),
     apollo: {
       $loadingKey: 'loading',
