@@ -3,7 +3,7 @@
     <main>
 
       <div class="underlinedHeader">
-        <h3 style="margin-bottom: 0; padding-left: 0.25em; position: relative; top: 0.5em;">December</h3>
+        <h3 style="margin-bottom: 0; padding-left: 0.25em; position: relative; top: 0.5em;">{{ currentMonth }}</h3>
         <h1>Checkmate Speed Dating</h1>
         <hr>
       </div>
@@ -149,9 +149,7 @@
       participantsABC_Female: [],
       participantsABC_Male: [],
       participantsABC_NonBinary: [],
-      queryResult: [],
-      currentEvent: 'January_2019'
-      // currentEvent: 'December_2018'
+      queryResult: []
     }),
     apollo: {
       $loadingKey: 'loading',
@@ -271,7 +269,21 @@
         } // result() {}
       } // participants: {}
     },
-    computed: {},
+    computed: {
+      currentDate: function() {
+        return new Date();
+      },
+      currentMonth: function() {
+        return new Intl.DateTimeFormat('en-US', {month: 'long'}).format(this.currentDate);
+      },
+      currentYear: function() {
+        return this.currentDate.getFullYear();
+      },
+      currentEvent: function() {
+        console.log(this.currentMonth + '_' + this.currentYear);
+        return this.currentMonth + '_' + this.currentYear;
+      }
+    },
     methods: {
       m_arrayAlphabetized: function(_data, _parameter) {
         // console.log('_data', _data);
