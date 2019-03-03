@@ -162,8 +162,8 @@
             const participantsABC = vm.m_arrayAlphabetized(data.participants, 'name');
 
             vm.participantsABC_Current = participantsABC.filter(function(_dater) {
-              // if(_dater.attendance.includes(vm.currentEvent)) {
-              if(_dater.attendance.includes('February_2019_SleepingVillage')) {
+              if(_dater.attendance.includes(vm.currentEvent)) {
+              // if(_dater.attendance.includes('February_2019_SleepingVillage')) {
                 return _dater;
               }
             });
